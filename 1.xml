@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<O:Provision xmlns:O="Provision" xmlns:S="Settings">
+    <S:DeviceInformation>
+        <S:Set>
+            <S:Model>MIX 2</S:Model>
+            <S:IMEI>888833336669999</S:IMEI>
+            <S:FriendlyName>MIX 2</S:FriendlyName>
+            <S:OS>Android 8.0.0</S:OS>
+            <S:PhoneNumber>+8618599999999</S:PhoneNumber>
+            <S:UserAgent>Android/8.0.0-EAS-1.3</S:UserAgent>
+            <S:MobileOperator>中国联通 (46001)</S:MobileOperator>
+        </S:Set>
+    </S:DeviceInformation>
+    <O:Policies>
+        <O:Policy>
+            <O:PolicyType>MS-EAS-Provisioning-WBXML</O:PolicyType>
+        </O:Policy>
+    </O:Policies>
+</O:Provision>
