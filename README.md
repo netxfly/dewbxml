@@ -11,9 +11,7 @@ tags = ["tag"]
 ```
 
 ## 背景
-最近的一个lua项目中需要解析wbxml，WBXML是XML的二进制表示形式，Exchange与手机端之间的通讯采用的就是该协议，我需要解析到手机端提交过来的数据，以提高用户体验。
-
-但是lua没有现成的Wbxml解析库，从头撸一个势必要花费大量造轮子的时间，在网上查找了半天，发现有一个go语言版本的[https://github.com/magicmonty/activesync-go](https://github.com/magicmonty/activesync-go)，写了几行测试代码，确认该库可以正常解析出Exchange的wbxml数据内容，如下所示：
+最近的一个lua项目中需要解析wbxml，WBXML是XML的二进制表示形式，Exchange与手机端之间的通讯采用的就是该协议，我需要解析到手机端提交过来的数据，但lua没有现成的Wbxml解析库，从头撸一个势必要花费大量造轮子的时间，在网上查找了半天，发现有一个go语言版本的[https://github.com/magicmonty/activesync-go](https://github.com/magicmonty/activesync-go)，写了几行测试代码，确认该库可以正常解析出Exchange的wbxml数据内容，如下所示：
 
 ![](http://docs.xsec.io/images/wbxml/001.png)
 
