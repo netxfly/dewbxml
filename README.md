@@ -12,13 +12,16 @@ tags = ["tag"]
 
 ## 背景
 最近的一个lua项目中需要解析wbxml，WBXML是XML的二进制表示形式，Exchange与手机端之间的通讯采用的就是该协议，我需要解析到手机端提交过来的数据，以提高用户体验。
+
 但是lua没有现成的Wbxml解析库，从头撸一个势必要花费大量造轮子的时间，在网上查找了半天，发现有一个go语言版本的[https://github.com/magicmonty/activesync-go](https://github.com/magicmonty/activesync-go)，写了几行测试代码，确认该库可以正常解析出Exchange的wbxml数据内容，如下所示：
+
 ![](http://docs.xsec.io/images/wbxml/001.png)
 
 
 ## 微服务 VS lua 扩展
 
 最初的方案打算用golang实现一个微服务，供openresty调用，该方案的特点是方便，能快速实现，但缺点也是非常明显的：
+
 - 性能损耗大：openresty每接收到一个请求都需要调用golang的restful api，然后等待golang把wbxml解析完并返回，这中间有非常大的性能损耗
 - 增加运维成本：golang微服务奔溃后，openresty将无法拿到想到的信息了，在运维时，除了要关注openresty本身外，还要时刻关注golang微服务的业务连续性、性能等指标
 
@@ -30,33 +33,38 @@ tags = ["tag"]
 关于用go语言扩展lua，github中已有现成的辅助库[https://github.com/theganyo/lua2go](https://github.com/theganyo/lua2go)可以使用，它的工作流程如下：
 
 1. 编写go模块，并导出需要给lua使用的函数：
-```golang 
-//export add
-func add(operand1 int, operand2 int) int {
-    return operand1 + operand2
-}
-```
+
+    ```golang 
+    //export add
+    func add(operand1 int, operand2 int) int {
+        return operand1 + operand2
+    }
+    ```
 1. 将go模块编译为静态库：
-```golang
-go build -buildmode=c-shared -o example.so example.go
-```
+
+    ```golang
+    go build -buildmode=c-shared -o example.so example.go
+    ```
 1. 编写lua文件，加载自己的.so文件：
-```lua
-local lua2go = require('lua2go')
-local example = lua2go.Load('./example.so')
-```
+
+    ```lua
+    local lua2go = require('lua2go')
+    local example = lua2go.Load('./example.so')
+    ```
 1. 在lua文件与头文件模块中注册导出的函数：
-```lua
-lua2go.Externs[[
-  extern GoInt add(GoInt p0, GoInt p1);
-]]
-```
+
+    ```lua
+    lua2go.Externs[[
+    extern GoInt add(GoInt p0, GoInt p1);
+    ]]
+    ```
 1. 在lua文件中调用导出的函数并将结果转化为lua格式的数据：
-```lua 
-local goAddResult = example.add(1, 1)
-local addResult = lua2go.ToLua(goAddResult)
-print('1 + 1 = ' .. addResult)
-```
+
+    ```lua 
+    local goAddResult = example.add(1, 1)
+    local addResult = lua2go.ToLua(goAddResult)
+    print('1 + 1 = ' .. addResult)
+    ```
 
 详细情况可以参考该项目的[example](https://github.com/theganyo/lua2go/tree/master/example)
 
@@ -238,3 +246,5 @@ print('Result: ' .. Result)
 ```
 最终的结果如下图所示：
 ![](http://docs.xsec.io/images/wbxml/002.png)
+
+造化弄人，在不经意间，还是造了一个轮子，项目地址为：[https://github.com/netxfly/dewbxml](https://github.com/netxfly/dewbxml)
